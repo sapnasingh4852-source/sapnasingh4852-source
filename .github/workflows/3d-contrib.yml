@@ -1,5 +1,5 @@
 # Generates a 3D isometric contribution graph from REAL GitHub contribution
-# data (yoshi389111/github-profile-3d-contour). Runs daily + on demand.
+# data (yoshi389111/github-profile-3d-contrib). Runs daily + on demand.
 # Output SVGs are pushed to the `output-3d` branch.
 name: GitHub-Profile-3D-Contrib
 
@@ -8,6 +8,9 @@ on:
     - cron: "0 18 * * *"
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: yoshi389111/github-profile-3d-contour@main
+      - uses: yoshi389111/github-profile-3d-contrib@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           USERNAME: ${{ github.repository_owner }}
