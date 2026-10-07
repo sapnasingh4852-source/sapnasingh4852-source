@@ -1,0 +1,32 @@
+# Generates the animated contribution-grid snake from REAL contribution data
+# (Platane/snk). Runs daily + on demand.
+# Output SVGs are pushed to the `output-snake` branch.
+name: Generate Snake Animation
+
+on:
+  schedule:
+    - cron: "0 1 * * *"
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Generate snake SVGs
+        uses: Platane/snk/svg-only@v3
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          outputs: |
+            dist/snake.svg
+            dist/snake-dark.svg?palette=github-dark
+
+      - name: Push snake SVGs to output-snake branch
+        uses: crazy-max/ghaction-github-pages@v4
+        with:
+          target_branch: output-snake
+          build_dir: dist
+          keep_history: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
